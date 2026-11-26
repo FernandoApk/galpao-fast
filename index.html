@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Galpão FastBraille - Controle por QR</title>
+
+<style>
+
+:root {
+
+--bg: #f1f5f9;
+
+--card: #ffffff;
+
+--text: #0f172a;
+
+--muted: #64748b;
+
+--border: #e2e8f0;
+
+--pri: #1d4ed8;
+
+--pri-soft: #dbeafe;
+
+--ok: #15803d;
+
+--ok-soft: #dcfce7;
+
+--warn: #b45309;
+
+--warn-soft: #fef3c7;
+
+--err: #b91c1c;
+
+--err-soft: #fee2e2;
+
+--radius: 14px;
+
+}
+
+
+
+{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+
+body {
+
+margin: 0;
+
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+background: var(--bg);
+
+color: var(--text);
+
+padding-bottom: 36px;
+
+}
+
+
+
+.wrap {
+
+max-width: 540px;
+
+margin: 0 auto;
+
+padding: 12px;
+
+}
+
+
+
+.topbar {
+
+background: #0f172a;
+
+color: #fff;
+
+padding: 12px 14px;
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+gap: 8px;
+
+position: sticky;
+
+top: 0;
+
+z-index: 20;
+
+box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+
+}
+
+
+
+.brand {
+
+font-weight: 800;
+
+font-size: 15px;
+
+letter-spacing: 0.2px;
+
+display: flex;
+
+align-items: center;
+
+gap: 6px;
+
+}
+
+
+
+.top-actions {
+
+display: flex;
+
+gap: 6px;
+
+align-items: center;
+
+}
+
+
+
+.btn-top {
+
+background: rgba(255, 255, 255, 0.14);
+
+color: #fff;
+
+border: 0;
+
+border-radius: 8px;
+
+padding: 7px 10px;
+
+font-size: 12px;
+
+font-weight: 600;
+
+cursor: pointer;
+
+}
+
+
+
+.btn-top:active { opacity: 0.8; }
+
+
+
+.card {
+
+background: var(--card);
+
+border: 1px solid var(--border);
+
+border-radius: var(--radius);
+
+padding: 15px;
+
+margin-bottom: 12px;
+
+box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+
+}
+
+
+
+.hidden { display: none !important; }
+
+
+
+h2 { margin: 0 0 6px 0; font-size: 18px; line-height: 1.25; }
+
+h3 { margin: 0 0 10px 0; font-size: 15px; color: var(--text); }
+
+.sub { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+
+
+
+label {
+
+display: block;
+
+font-size: 12px;
+
+font-weight: 700;
+
+color: #334155;
+
+margin: 10px 0 4px 0;
+
+}
+
+
+
+input, select, textarea {
+
+width: 100%;
+
+padding: 11px 12px;
+
+font-size: 16px;
+
+border: 1px solid #cbd5e1;
+
+border-radius: 10px;
+
+background: #fff;
+
+color: var(--text);
+
+font-family: inherit;
+
+}
+
+
+
+input:focus, select:focus, textarea:focus {
+
+outline: none;
+
+border-color: var(--pri);
+
+box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
+
+}
+
+
+
+.row { display: flex; gap: 8px; }
+
+.row > * { flex: 1; }
+
+
+
+.btn {
+
+width: 100%;
+
+padding: 13px 14px;
+
+border: 0;
+
+border-radius: 10px;
+
+font-size: 15px;
+
+font-weight: 700;
+
+cursor: pointer;
+
+display: inline-flex;
+
+align-items: center;
+
+justify-content: center;
+
+gap: 6px;
+
+}
+
+
+
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-pri { background: var(--pri); color: #fff; }
+
+.btn-ok { background: var(--ok); color: #fff; }
+
+.btn-soft { background: var(--pri-soft); color: var(--pri); }
+
+.btn-gray { background: #e2e8f0; color: #1e293b; }
+
+.btn-err { background: var(--err-soft); color: var(--err); }
+
+.btn-sm { padding: 8px 11px; font-size: 13px; width: auto; }
+
+
+
+.chips {
+
+display: flex;
+
+flex-wrap: wrap;
+
+gap: 6px;
+
+margin: 6px 0 8px 0;
+
+}
+
+
+
+.chip {
+
+background: var(--pri-soft);
+
+color: var(--pri);
+
+border: 0;
+
+border-radius: 999px;
+
+padding: 8px 12px;
+
+font-size: 13px;
+
+font-weight: 700;
+
+cursor: pointer;
+
+}
+
+
+
+.chip:active { filter: brightness(0.95); }
+
+
+
+.check-row {
+
+display: flex;
+
+align-items: center;
+
+gap: 8px;
+
+margin: 12px 0;
+
+font-size: 13px;
+
+color: #334155;
+
+font-weight: 500;
+
+cursor: pointer;
+
+}
+
+
+
+.check-row input[type="checkbox"] {
+
+width: 18px;
+
+height: 18px;
+
+margin: 0;
+
+flex-shrink: 0;
+
+}
+
+
+
+.alert {
+
+padding: 10px 12px;
+
+border-radius: 10px;
+
+font-size: 13px;
+
+font-weight: 600;
+
+margin: 10px 0;
+
+line-height: 1.35;
+
+}
+
+
+
+.alert-ok { background: var(--ok-soft); color: var(--ok); }
+
+.alert-err { background: var(--err-soft); color: var(--err); }
+
+.alert-warn { background: var(--warn-soft); color: var(--warn); }
+
+.alert-info { background: var(--pri-soft); color: var(--pri); }
+
+
+
+.links-row {
+
+display: flex;
+
+justify-content: space-between;
+
+gap: 8px;
+
+margin-top: 14px;
+
+flex-wrap: wrap;
+
+}
+
+
+
+.link-btn {
+
+background: none;
+
+border: 0;
+
+color: var(--pri);
+
+font-size: 13px;
+
+font-weight: 700;
+
+padding: 4px 0;
+
+cursor: pointer;
+
+text-decoration: underline;
+
+}
+
+
+
+/* Abas principais */
+
+.tabs {
+
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 6px;
+
+background: #e2e8f0;
+
+padding: 4px;
+
+border-radius: 12px;
+
+margin-bottom: 12px;
+
+}
+
+
+
+.tab-btn {
+
+border: 0;
+
+background: transparent;
+
+color: #475569;
+
+padding: 11px 8px;
+
+border-radius: 9px;
+
+font-size: 14px;
+
+font-weight: 800;
+
+cursor: pointer;
+
+}
+
+
+
+.tab-btn.active {
+
+background: #fff;
+
+color: var(--pri);
+
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+}
+
+
+
+/* Resumo do operador */
+
+.op-bar {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+gap: 8px;
+
+font-size: 13px;
+
+margin-bottom: 10px;
+
+padding: 0 2px;
+
+}
+
+
+
+.badge {
+
+display: inline-block;
+
+padding: 3px 8px;
+
+border-radius: 999px;
+
+font-size: 11px;
+
+font-weight: 700;
+
+}
+
+
+
+.b-pri { background: var(--pri-soft); color: var(--pri); }
+
+.b-ok { background: var(--ok-soft); color: var(--ok); }
+
+.b-warn { background: var(--warn-soft); color: var(--warn); }
+
+.b-err { background: var(--err-soft); color: var(--err); }
+
+.b-gray { background: #e2e8f0; color: #334155; }
+
+
+
+/* KPIs de Saldo */
+
+.kpi-grid {
+
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 10px;
+
+margin: 12px 0;
+
+}
+
+
+
+.kpi {
+
+background: #f8fafc;
+
+border: 1px solid var(--border);
+
+border-radius: 12px;
+
+padding: 12px;
+
+text-align: center;
+
+}
+
+
+
+.kpi.destaque {
+
+background: #eff6ff;
+
+border-color: #bfdbfe;
+
+}
+
+
+
+.kpi-label {
+
+font-size: 11px;
+
+font-weight: 700;
+
+text-transform: uppercase;
+
+color: var(--muted);
+
+letter-spacing: 0.4px;
+
+}
+
+
+
+.kpi-val {
+
+font-size: 28px;
+
+font-weight: 900;
+
+color: var(--text);
+
+margin: 4px 0 2px 0;
+
+line-height: 1.1;
+
+}
+
+
+
+.kpi-sub {
+
+font-size: 11px;
+
+color: var(--muted);
+
+}
+
+
+
+.meta-grid {
+
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 8px;
+
+margin-top: 10px;
+
+}
+
+
+
+.meta-box {
+
+background: #f8fafc;
+
+border-radius: 10px;
+
+padding: 9px 10px;
+
+font-size: 12px;
+
+}
+
+
+
+.meta-box span {
+
+display: block;
+
+font-size: 11px;
+
+color: var(--muted);
+
+margin-bottom: 2px;
+
+}
+
+
+
+.meta-box b { font-size: 13px; color: var(--text); }
+
+
+
+.local-box {
+
+background: #fffbeb;
+
+border: 1px solid #fde68a;
+
+border-radius: 10px;
+
+padding: 10px 12px;
+
+margin-top: 10px;
+
+font-size: 13px;
+
+}
+
+
+
+/* Barra de Progresso em segundo plano */
+
+.fila-box {
+
+background: #eff6ff;
+
+border: 1px solid #93c5fd;
+
+border-radius: var(--radius);
+
+padding: 12px 14px;
+
+margin-bottom: 12px;
+
+}
+
+
+
+.fila-head {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+font-size: 13px;
+
+font-weight: 700;
+
+color: #1e3a8a;
+
+margin-bottom: 6px;
+
+}
+
+
+
+.prog-track {
+
+width: 100%;
+
+height: 11px;
+
+background: #dbeafe;
+
+border-radius: 999px;
+
+overflow: hidden;
+
+margin: 6px 0;
+
+}
+
+
+
+.prog-fill {
+
+height: 100%;
+
+width: 0%;
+
+background: linear-gradient(90deg, #2563eb, #1d4ed8);
+
+border-radius: 999px;
+
+transition: width 0.5s ease;
+
+}
+
+
+
+.fila-note {
+
+font-size: 12px;
+
+color: #1e40af;
+
+margin-top: 4px;
+
+}
+
+
+
+/* Listas de histórico e pedidos */
+
+.list-item {
+
+border-top: 1px solid var(--border);
+
+padding: 10px 0;
+
+font-size: 13px;
+
+}
+
+
+
+.list-item:first-child { border-top: 0; padding-top: 2px; }
+
+
+
+.list-top {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+gap: 6px;
+
+margin-bottom: 4px;
+
+flex-wrap: wrap;
+
+}
+
+
+
+.list-meta {
+
+font-size: 12px;
+
+color: var(--muted);
+
+line-height: 1.4;
+
+}
+
+
+
+/* Modal */
+
+.modal-bg {
+
+position: fixed;
+
+inset: 0;
+
+background: rgba(15, 23, 42, 0.58);
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+padding: 14px;
+
+z-index: 50;
+
+}
+
+
+
+.modal {
+
+background: #fff;
+
+border-radius: 16px;
+
+max-width: 480px;
+
+width: 100%;
+
+max-height: 88vh;
+
+overflow-y: auto;
+
+padding: 18px;
+
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+}
+
+
+
+.modal-head {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+margin-bottom: 10px;
+
+}
+
+
+
+.modal-close {
+
+background: #f1f5f9;
+
+border: 0;
+
+border-radius: 8px;
+
+width: 32px;
+
+height: 32px;
+
+font-size: 16px;
+
+font-weight: bold;
+
+cursor: pointer;
+
+}
+
+
+
+.step {
+
+display: flex;
+
+gap: 10px;
+
+margin-bottom: 12px;
+
+font-size: 13px;
+
+line-height: 1.45;
+
+}
+
+
+
+.step-num {
+
+width: 24px;
+
+height: 24px;
+
+border-radius: 50%;
+
+background: var(--pri);
+
+color: #fff;
+
+font-weight: 800;
+
+font-size: 12px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+flex-shrink: 0;
+
+margin-top: 2px;
+
+}
+
+
+
+.divider {
+
+height: 1px;
+
+background: var(--border);
+
+margin: 14px 0;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+
+<div class="topbar">
+
+<div class="brand">📦 Galpão FastBraille</div>
+
+<div class="top-actions">
+
+<button class="btn-top" onclick="abrirModal('modalTutorial')">❓ Como usar</button>
+
+<button class="btn-top hidden" id="btnTopPin" onclick="abrirModal('modalTrocarPin')">🔑 PIN</button>
+
+<button class="btn-top hidden" id="btnTopSair" onclick="sair()">Sair</button>
+
+</div>
+
+</div>
+
+
+
+<div class="wrap">
+
+
+
+<!-- Aviso se faltou configurar as chaves -->
+
+<div id="boxConfigFaltando" class="card hidden">
+
+<h2>⚙️ Configuração pendente</h2>
+
+<div class="alert alert-warn">
+
+Edite o arquivo <b>index.html</b> e preencha <code>SUPABASE_URL</code> e <code>SUPABASE_ANON_KEY</code> no início do script.
+
+</div>
+
+</div>
+
+
+
+<!-- Tela sem token na URL -->
+
+<div id="telaSemToken" class="card hidden">
+
+<h2>📷 Leia o QR Code de um palete</h2>
+
+<div class="sub">
+
+Aponte a câmera do celular para o QR Code impresso na placa do palete para ver o saldo atualizado e registrar retiradas ou trocas de local.
+
+</div>
+
+<label>Ou digite o código do QR manualmente (para testes)</label>
+
+<input id="inputTokenManual" placeholder="Ex: FB1A2B3C4D5E6F" autocapitalize="characters">
+
+<div style="margin-top:10px;">
+
+<button class="btn btn-pri" onclick="abrirTokenManual()">Abrir Item</button>
+
+</div>
+
+</div>
+
+
+
+<!-- TELA DE LOGIN / CADASTRO / ESQUECI PIN -->
+
+<div id="telaAuth" class="card hidden">
+
+<!-- Modo Login -->
+
+<div id="modoLogin">
+
+<h2>🔐 Identifique-se com seu PIN</h2>
+
+<div class="sub">Digite seu PIN pessoal para consultar este papel e registrar cortes ou movimentações.</div>
+
+
+
+<label>Seu PIN</label>
+
+<input id="inputPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Digite seu PIN">
+
+
+
+<label class="check-row">
+
+<input type="checkbox" id="chkLembrar">
+
+Manter meu PIN conectado por 8h neste celular
+
+</label>
+
+
+
+<div id="msgAuth"></div>
+
+
+
+<button class="btn btn-pri" id="btnEntrar" onclick="entrarComPin()">Entrar</button>
+
+
+
+<div class="links-row">
+
+<button class="link-btn" onclick="mudarModoAuth('cadastro')">Primeiro acesso? Solicitar cadastro</button>
+
+<button class="link-btn" onclick="mudarModoAuth('esqueci')">Esqueci meu PIN</button>
+
+</div>
+
+</div>
+
+
+
+<!-- Modo Solicitar Cadastro -->
+
+<div id="modoCadastro" class="hidden">
+
+<h2>📝 Solicitar Acesso</h2>
+
+<div class="sub">Escolha seu nome e um PIN pessoal (4 a 12 dígitos). Seu acesso será liberado assim que a gestão aprovar na planilha.</div>
+
+
+
+<label>Seu nome</label>
+
+<input id="cadNome" placeholder="Ex: Carlos Silva" autocomplete="name">
+
+
+
+<label>Crie seu PIN (4 a 6 números)</label>
+
+<input id="cadPin" type="password" inputmode="numeric" placeholder="Ex: 2580">
+
+
+
+<label>Confirme seu PIN</label>
+
+<input id="cadPin2" type="password" inputmode="numeric" placeholder="Repita o PIN">
+
+
+
+<div id="msgCad"></div>
+
+
+
+<button class="btn btn-ok" id="btnSolicitarCad" onclick="enviarSolicitacaoCadastro()">Enviar solicitação</button>
+
+<div class="links-row">
+
+<button class="link-btn" onclick="mudarModoAuth('login')">← Voltar para entrar com PIN</button>
+
+</div>
+
+</div>
+
+
+
+<!-- Modo Esqueci meu PIN -->
+
+<div id="modoEsqueci" class="hidden">
+
+<h2>🔑 Recuperar / Trocar PIN</h2>
+
+<div class="sub">Informe seu nome cadastrado e escolha um novo PIN. A gestão aprova o pedido em 1 clique na planilha.</div>
+
+
+
+<label>Seu nome (como está na planilha)</label>
+
+<input id="recNome" placeholder="Ex: Carlos Silva">
+
+
+
+<label>Novo PIN desejado</label>
+
+<input id="recPin" type="password" inputmode="numeric" placeholder="Mínimo 4 dígitos">
+
+
+
+<label>Confirme o novo PIN</label>
+
+<input id="recPin2" type="password" inputmode="numeric" placeholder="Repita o novo PIN">
+
+
+
+<div id="msgRec"></div>
+
+
+
+<button class="btn btn-pri" id="btnSolicitarRec" onclick="enviarSolicitacaoReset()">Pedir troca de PIN</button>
+
+<div class="links-row">
+
+<button class="link-btn" onclick="mudarModoAuth('login')">← Voltar para entrar com PIN</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ÁREA LOGADA -->
+
+<div id="telaApp" class="hidden">
+
+
+
+<div class="op-bar">
+
+<div>
+
+Olá, <b id="lblOperador"></b>
+
+<span id="lblPapel" class="badge b-pri"></span>
+
+</div>
+
+<button class="btn btn-gray btn-sm" id="btnRefresh" onclick="carregarItem(false)">🔄 Atualizar</button>
+
+</div>
+
+
+
+<!-- BARRA DE PROGRESSO DOS PEDIDOS PENDENTES (NÃO BLOQUEIA O OPERADOR) -->
+
+<div id="boxFilaProgresso" class="fila-box hidden">
+
+<div class="fila-head">
+
+<span id="lblFilaTitulo">⏳ Enviando para a planilha...</span>
+
+<span id="lblFilaPct">0%</span>
+
+</div>
+
+<div class="prog-track">
+
+<div class="prog-fill" id="barraProgresso"></div>
+
+</div>
+
+<div class="fila-note" id="lblFilaDetalhe">
+
+Você já pode escanear o próximo palete — este pedido continua confirmando sozinho.
+
+</div>
+
+</div>
+
+
+
+<div id="msgGlobal"></div>
+
+
+
+<!-- ABAS: 1 = CONSULTA ATUALIZADA | 2 = REGISTRAR CORTE / LOCAL -->
+
+<div class="tabs">
+
+<button class="tab-btn active" id="tabBtnConsulta" onclick="abrirAba('consulta')">📊 1. Consulta</button>
+
+<button class="tab-btn" id="tabBtnAcao" onclick="abrirAba('acao')">✂️ 2. Corte / Local</button>
+
+</div>
+
+
+
+<!-- ABA 1: CONSULTA ATUALIZADA -->
+
+<div id="abaConsulta">
+
+<div class="card">
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+
+<div>
+
+<h2 id="itemPapel">—</h2>
+
+<div class="sub" style="margin-bottom:4px;" id="itemSub">—</div>
+
+</div>
+
+<span id="itemStatusBadge" class="badge b-gray"></span>
+
+</div>
+
+
+
+<div class="kpi-grid">
+
+<div class="kpi destaque">
+
+<div class="kpi-label">Resmas Disponíveis</div>
+
+<div class="kpi-val" id="kpiResmas">0</div>
+
+<div class="kpi-sub" id="kpiResmasSub"></div>
+
+</div>
+
+<div class="kpi">
+
+<div class="kpi-label">Paletes Disponíveis</div>
+
+<div class="kpi-val" id="kpiPaletes">0</div>
+
+<div class="kpi-sub" id="kpiPaletesSub"></div>
+
+</div>
+
+</div>
+
+
+
+<div id="alertaPendenteItem" class="alert alert-info hidden" style="margin:8px 0 0 0;"></div>
+
+
+
+<div class="local-box">
+
+📍 <b>Localização atual:</b> <span id="itemLocal">Não informada</span>
+
+</div>
+
+
+
+<div class="meta-grid">
+
+<div class="meta-box"><span>FSC</span><b id="itemFsc">—</b></div>
+
+<div class="meta-box"><span>Regime</span><b id="itemRegime">—</b></div>
+
+<div class="meta-box"><span>Ref. Palete</span><b id="itemRefPal">—</b></div>
+
+<div class="meta-box"><span>Sincronizado em</span><b id="itemAtualizado">—</b></div>
+
+</div>
+
+
+
+<div style="margin-top:12px;">
+
+<button class="btn btn-pri" onclick="abrirAba('acao')">✂️ Registrar Corte ou Trocar Local →</button>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>🕒 Últimas movimentações deste papel (via QR)</h3>
+
+<div id="listaHistItem"></div>
+
+</div>
+
+</div>
+
+
+
+<!-- ABA 2: REGISTRAR CORTE / LOCALIZAÇÃO / MEUS PEDIDOS -->
+
+<div id="abaAcao" class="hidden">
+
+
+
+<!-- Card de Corte / Saída -->
+
+<div class="card">
+
+<h3>✂️ Registrar Retirada / Corte</h3>
+
+<div class="sub" id="acaoResumoItem" style="margin-bottom:8px;"></div>
+
+
+
+<label>Atalhos de quantidade</label>
+
+<div class="chips">
+
+<button type="button" class="chip" onclick="atalhoQtd('palete')">1 palete inteiro</button>
+
+<button type="button" class="chip" onclick="atalhoQtd('meio')">½ palete</button>
+
+<button type="button" class="chip" onclick="atalhoQtd('tudo')">Retirar tudo</button>
+
+</div>
+
+
+
+<div class="row">
+
+<div>
+
+<label>Resmas retiradas *</label>
+
+<input id="inpResmas" type="number" inputmode="numeric" min="1" step="1" placeholder="Ex: 10">
+
+</div>
+
+<div>
+
+<label>Paletes inteiros</label>
+
+<input id="inpPaletes" type="number" inputmode="numeric" min="0" step="1" value="0">
+
+</div>
+
+</div>
+
+
+
+<label>OP / Destino do corte *</label>
+
+<input id="inpDestino" list="dlDestinos" placeholder="Ex: OP 1234 - Guilhotina">
+
+<datalist id="dlDestinos"></datalist>
+
+
+
+<label>Observação do corte (opcional)</label>
+
+<input id="inpObs" placeholder="Ex: Corte 31,5 x 25,5 cm / Braille PNLD">
+
+
+
+<div id="msgSaida"></div>
+
+
+
+<div style="margin-top:12px;">
+
+<button class="btn btn-ok" id="btnEnviarSaida" onclick="enviarPedidoSaida()">✅ Enviar Retirada para Planilha</button>
+
+</div>
+
+</div>
+
+
+
+<!-- Card de Troca de Localização -->
+
+<div class="card">
+
+<h3>📍 Atualizar Localização do Palete</h3>
+
+<div class="sub" style="margin-bottom:6px;">
+
+Atual: <b id="lblLocalAtualAcao">Não informada</b>
+
+</div>
+
+
+
+<div class="row">
+
+<div>
+
+<label>Rua</label>
+
+<select id="selRua"></select>
+
+</div>
+
+<div>
+
+<label>Posição</label>
+
+<select id="selPos"></select>
+
+</div>
+
+<div>
+
+<label>Andar</label>
+
+<select id="selAndar"></select>
+
+</div>
+
+</div>
+
+
+
+<div style="margin-top:8px;">
+
+<button type="button" class="btn btn-soft btn-sm" style="width:100%;" onclick="preencherEnderecoRua()">
+
+Usar endereço selecionado acima
+
+</button>
+
+</div>
+
+
+
+<label>Locais especiais</label>
+
+<div class="chips" id="chipsLocaisEspeciais"></div>
+
+
+
+<label>Local que será salvo *</label>
+
+<input id="inpNovoLocal" placeholder="Ex: Rua B - Pos 3 - Térreo">
+
+
+
+<label class="check-row">
+
+<input type="checkbox" id="chkAddLocal">
+
+Adicionar ao local atual (separa com ;) — use se houver paletes em 2 lugares
+
+</label>
+
+
+
+<div id="msgLocal"></div>
+
+
+
+<button class="btn btn-pri" id="btnEnviarLocal" onclick="enviarPedidoLocal()">📍 Atualizar Localização</button>
+
+</div>
+
+
+
+<!-- Card de Acompanhamento e Cancelamento (15h) -->
+
+<div class="card">
+
+<h3>📋 Meus Pedidos Recentes (Cancelamento até 15h)</h3>
+
+<div class="sub" style="margin-bottom:6px;">
+
+Acompanhe a confirmação na planilha. Errou uma saída? Você pode cancelar em até 15 horas.
+
+</div>
+
+<div id="listaMeusPedidos"></div>
+
+</div>
+
+
+
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+<!-- MODAL TUTORIAL FÁCIL -->
+
+<div id="modalTutorial" class="modal-bg hidden" onclick="fecharModalFora(event,'modalTutorial')">
+
+<div class="modal">
+
+<div class="modal-head">
+
+<h3 style="margin:0;">❓ Como usar o QR do Galpão</h3>
+
+<button class="modal-close" onclick="fecharModal('modalTutorial')">✕</button>
+
+</div>
+
+
+
+<div class="step">
+
+<div class="step-num">1</div>
+
+<div><b>Primeiro acesso:</b> clique em <i>"Solicitar cadastro"</i>, digite seu nome e crie um PIN (4 a 6 números). Avise a gestão para aprovar seu nome na planilha.</div>
+
+</div>
+
+
+
+<div class="step">
+
+<div class="step-num">2</div>
+
+<div><b>Aba 1 (Consulta):</b> mostra o saldo atualizado em tempo real, onde o palete está guardado e as últimas retiradas. Funciona a qualquer hora do dia.</div>
+
+</div>
+
+
+
+<div class="step">
+
+<div class="step-num">3</div>
+
+<div><b>Aba 2 (Corte / Local):</b> preencha quantas resmas/paletes retirou e a OP/destino (ou escolha a nova rua se moveu o palete) e toque em enviar.</div>
+
+</div>
+
+
+
+<div class="step">
+
+<div class="step-num">4</div>
+
+<div><b>Barra de progresso (até 1 min):</b> a planilha confirma o pedido automaticamente a cada minuto. <b>Você não precisa ficar esperando!</b> Pode já apontar a câmera para o próximo palete que o pedido anterior termina sozinho.</div>
+
+</div>
+
+
+
+<div class="step">
+
+<div class="step-num">5</div>
+
+<div><b>Digitou errado?</b> Na parte de baixo da Aba 2 aparece o botão <b>↩️ Cancelar saída</b> durante 15 horas — ele estorna o saldo automaticamente.</div>
+
+</div>
+
+
+
+<div class="step">
+
+<div class="step-num">6</div>
+
+<div><b>Esqueceu o PIN?</b> Na tela de entrada clique em <i>"Esqueci meu PIN"</i>, informe seu nome e um novo PIN. A gestão aprova na planilha em segundos.</div>
+
+</div>
+
+
+
+<button class="btn btn-pri" onclick="fecharModal('modalTutorial')">Entendi!</button>
+
+</div>
+
+</div>
+
+
+
+<!-- MODAL TROCAR PRÓPRIO PIN -->
+
+<div id="modalTrocarPin" class="modal-bg hidden" onclick="fecharModalFora(event,'modalTrocarPin')">
+
+<div class="modal">
+
+<div class="modal-head">
+
+<h3 style="margin:0;">🔑 Trocar meu PIN</h3>
+
+<button class="modal-close" onclick="fecharModal('modalTrocarPin')">✕</button>
+
+</div>
+
+
+
+<label>Novo PIN (4 a 12 caracteres)</label>
+
+<input id="trocaPin1" type="password" inputmode="numeric" placeholder="Digite o novo PIN">
+
+
+
+<label>Confirme o novo PIN</label>
+
+<input id="trocaPin2" type="password" inputmode="numeric" placeholder="Repita o novo PIN">
+
+
+
+<div id="msgTrocaPin"></div>
+
+
+
+<div style="margin-top:12px;">
+
+<button class="btn btn-pri" id="btnSalvarPin" onclick="salvarTrocaPin()">Salvar Novo PIN</button>
+
+</div>
+
+</div>
+
+</div>
+
